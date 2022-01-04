@@ -51,3 +51,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.167986, 0.823614, 0.430039 )
 visible = false
 mesh = SubResource( 3 )
 material/0 = null
+
+[node name="FloorCast" type="RayCast" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+enabled = true
+cast_to = Vector3( 0, -0.6, 0 )

@@ -13,3 +13,9 @@ const MAX_POWER = 10
 
 var spin = Vector2(0,0)
 const SPIN_STEPS = 0.1
+
+func _init():
+	mode = MODE.SHORT
+	angle = 0
+	power = 0.5
+	spin = Vector2(0,0)

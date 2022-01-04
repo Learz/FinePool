@@ -88,11 +88,14 @@ func _process(delta):
 	var ballPos = ball.global_transform.origin+Vector3.UP*0.5
 	$BallAnchor.global_transform.origin = ballPos
 	
+	#FIX: Camera flickering while predicting (saved with lerp but still present)
 	#Move the camera anchor to either the ball or the trajectory
+	var cam_dest = Vector3.ZERO
 	if ball.moving or focus_cam:
-		$CameraAnchor.global_transform.origin = Vector3(ballPos.x,clamp(ballPos.y, 0, 10),ballPos.z)
+		cam_dest = Vector3(ballPos.x,clamp(ballPos.y, 0, 10),ballPos.z)
 	else:
-		$CameraAnchor.global_transform.origin = (ball.global_transform.origin + ball_predictor.global_transform.origin)/2
+		cam_dest = (ball.global_transform.origin + ball_predictor.global_transform.origin)/2
+	$CameraAnchor.global_transform.origin = lerp($CameraAnchor.global_transform.origin, cam_dest, delta*2)
 	
 	#Move the trajectory predition spheres along the path
 	if ball_predictor.prediction_line.size() > 0:

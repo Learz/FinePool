@@ -11,6 +11,7 @@ func _physics_process(delta: float) -> void:
 	._physics_process(delta)
 	if prediction_calculated == false:
 		for i in prediction_length:
+			$FloorCast.force_raycast_update()
 			physics_step(delta)
 			prediction_line.append(global_transform.origin)
 		moving = false
