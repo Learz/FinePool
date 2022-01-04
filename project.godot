@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Line3D",
 "language": "GDScript",
 "path": "res://Addons/LineRenderer/LineRenderer.gd"
+}, {
+"base": "Reference",
+"class": "ShotData",
+"language": "GDScript",
+"path": "res://ShotData.gd"
 } ]
 _global_script_class_icons={
-"Line3D": ""
+"Line3D": "",
+"ShotData": ""
 }
 
 [application]
@@ -55,6 +61,11 @@ ui_spin_modifier={
 h={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":72,"unicode":0,"echo":false,"script":null)
+ ]
+}
+focus_camera={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":67,"unicode":0,"echo":false,"script":null)
  ]
 }
 

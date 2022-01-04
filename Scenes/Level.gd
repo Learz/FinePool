@@ -1,32 +1,21 @@
 extends Spatial
 
+onready var ball = $Ball
+onready var ball_predictor = $Ball/BallPredictor
+
 #-----Shot Variables-----
-enum SHOOT_MODE {LONG, SHORT, HIGH}
-var shoot_mode = SHOOT_MODE.SHORT
-
-var angle = 0
-const ANGLE_STEPS = 5
-
-var shot_power = 0.5
-const MAX_SHOT_POWER = 5
-
-var direction = Vector2(1,0)
-
-var spin = Vector2(0,0)
-const SPIN_STEPS = 0.1
-
-var prediction_line:PoolVector3Array
-var prediction_length = 200
-var prediction_calculated = false
+var shot = ShotData.new()
 
 #-----UI Variables-----
 var _spin_modifier = false
 var _power_select = false
 var _power_reverse = false
 
+var focus_cam = false
+
 #-----Input Variables-----
 const INIT_REPEATER_TIME = 4
-const REG_REPEATER_TIME = 2
+const REG_REPEATER_TIME = 1
 var _repeater_time = 0
 var _start_repeat = false
 var _repeat_action
@@ -38,12 +27,15 @@ var _repeatable_actions = [
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Floor.make_baked_meshes()
-	$Floor.get_bake_meshes()
+#	$Floor.make_baked_meshes()
+#	$Floor.get_bake_meshes()
 	pass
 
 
 func _input(event):
+	if event.is_action_pressed("focus_camera"):
+		focus_cam = !focus_cam
+	
 	if event.is_action_pressed("ui_reset"):
 		get_tree().reload_current_scene()
 		
@@ -56,32 +48,32 @@ func _input(event):
 	
 	if _spin_modifier:
 		if event.is_action_pressed("ui_right"):
-			prediction_calculated = false
-			spin.x += SPIN_STEPS
+			shot.spin.x += shot.SPIN_STEPS
+			ball_predictor.calculate_prediction(shot)
 		if event.is_action_pressed("ui_left"):
-			prediction_calculated = false
-			spin.x -= SPIN_STEPS
+			shot.spin.x -= shot.SPIN_STEPS
+			ball_predictor.calculate_prediction(shot)
 		if event.is_action_pressed("ui_up"):
-			prediction_calculated = false
-			spin.y += SPIN_STEPS
+			shot.spin.y += shot.SPIN_STEPS
+			ball_predictor.calculate_prediction(shot)
 		if event.is_action_pressed("ui_down"):
-			prediction_calculated = false
-			spin.y -= SPIN_STEPS
-		$UI/Panel/Spin/SpinCursor.rect_position = Vector2(44,44) + Vector2(spin.x, -spin.y)*(5/SPIN_STEPS)
+			shot.spin.y -= shot.SPIN_STEPS
+			ball_predictor.calculate_prediction(shot)
+		$UI/Panel/Spin/SpinCursor.rect_position = Vector2(44,44) + Vector2(shot.spin.x, -shot.spin.y)*(5/shot.SPIN_STEPS)
 	else:
 		if event.is_action_pressed("ui_up"):
-			prediction_calculated = false
-			shoot_mode = clamp(shoot_mode+1,0,2)
+			shot.mode = clamp(shot.mode+1,0,2)
+			ball_predictor.calculate_prediction(shot)
 		if event.is_action_pressed("ui_down"):
-			prediction_calculated = false
-			shoot_mode = clamp(shoot_mode-1,0,2)
+			shot.mode = clamp(shot.mode-1,0,2)
+			ball_predictor.calculate_prediction(shot)
 
 	if event.is_action_pressed("ui_select"):
 		if _power_select == true:
 			_power_select = false
-			$Ball.hit(direction, true if shoot_mode == SHOOT_MODE.HIGH else false, shot_power, spin)
+			ball.hit(shot)
 		else:
-			shot_power = 0
+			shot.power = 0
 			_power_select = true
 		
 
@@ -93,42 +85,30 @@ func _process(delta):
 	_draw_UI(delta)
 	
 	#Move the the bal anchor to the ball position
-	var ballPos = $Ball.global_transform.origin+Vector3.UP*0.5
+	var ballPos = ball.global_transform.origin+Vector3.UP*0.5
 	$BallAnchor.global_transform.origin = ballPos
 	
 	#Move the camera anchor to either the ball or the trajectory
-#	if $Ball.launched:
-	$CameraAnchor.global_transform.origin = Vector3(ballPos.x,clamp(ballPos.y, 0, 10),ballPos.z)
-#	else:
-#		$CameraAnchor.global_transform.origin = ($Ball.global_transform.origin + $BallPredictor.global_transform.origin)/2
+	if ball.moving or focus_cam:
+		$CameraAnchor.global_transform.origin = Vector3(ballPos.x,clamp(ballPos.y, 0, 10),ballPos.z)
+	else:
+		$CameraAnchor.global_transform.origin = (ball.global_transform.origin + ball_predictor.global_transform.origin)/2
 	
 	#Move the trajectory predition spheres along the path
-	for i in $MultiMeshInstance.multimesh.instance_count:
-		$MultiMeshInstance.multimesh.set_instance_transform(
-			i, 
-			Transform(
-				Basis(),
-				prediction_line[int((OS.get_ticks_msec()/60.0)+(i*10))%prediction_length]
+	if ball_predictor.prediction_line.size() > 0:
+		for i in $MultiMeshInstance.multimesh.instance_count:
+			$MultiMeshInstance.multimesh.set_instance_transform(
+				i, 
+				Transform(
+					Basis(),
+					ball_predictor.prediction_line[int((OS.get_ticks_msec()/60.0)+(i*10))%ball_predictor.prediction_line.size()]
+				)
 			)
-		)
 
 
 func _physics_process(delta):
 	#Ball trajectory prediction
-	if prediction_calculated == false:
-		prediction_line.resize(0)
-		$BallPredictor.global_transform.origin = $Ball.global_transform.origin
-		$BallPredictor.hit(
-			direction, 
-			true if shoot_mode == SHOOT_MODE.HIGH else false, 
-			MAX_SHOT_POWER, 
-			spin)
-		prediction_length = 100 if shoot_mode == SHOOT_MODE.SHORT else 200
-		for i in prediction_length:
-			$BallPredictor.physics_step(delta)
-			prediction_line.append($BallPredictor.global_transform.origin)
-		$BallPredictor.launched = false
-		prediction_calculated = true
+	pass
 
 
 func _on_Sensor_area_entered(area):
@@ -142,24 +122,22 @@ func _on_Sensor_area_entered(area):
 func _draw_UI(delta):
 	#Display the shot power meter
 	if _power_select == true:
-		if shot_power >= MAX_SHOT_POWER:
+		if shot.power >= shot.MAX_POWER:
 			_power_reverse = true 
-		if shot_power <= 0:
+		if shot.power <= 0:
 			_power_reverse = false 
-		var mul = MAX_SHOT_POWER
-		shot_power += -mul * delta if _power_reverse else mul * delta
-		$UI/Panel/HitPowerBar.value = (shot_power / MAX_SHOT_POWER) * $UI/Panel/HitPowerBar.max_value
+		var mul = shot.MAX_POWER
+		shot.power += -mul * delta if _power_reverse else mul * delta
+		$UI/Panel/HitPowerBar.value = (shot.power / shot.MAX_POWER) * $UI/Panel/HitPowerBar.max_value
 
 
 func _handle_repeatable_input(delta):
 	if Input.is_action_pressed("ui_right") and (_repeater_time <= 0 or !_start_repeat):
-		prediction_calculated = false
-		angle += deg2rad(ANGLE_STEPS)
-		direction = Vector2(1,0).rotated(angle)
+		shot.angle += deg2rad(shot.ANGLE_STEPS)
+		ball_predictor.calculate_prediction(shot)
 	if Input.is_action_pressed("ui_left") and (_repeater_time <= 0 or !_start_repeat):
-		prediction_calculated = false
-		angle -= deg2rad(ANGLE_STEPS)
-		direction = Vector2(1,0).rotated(angle)
+		shot.angle -= deg2rad(shot.ANGLE_STEPS)
+		ball_predictor.calculate_prediction(shot)
 	
 	for action in _repeatable_actions:
 		if Input.is_action_just_pressed(action):
@@ -170,6 +148,6 @@ func _handle_repeatable_input(delta):
 
 	if _start_repeat:
 		if _repeater_time <= 0:
-			prediction_calculated = false
+			ball_predictor.calculate_prediction(shot)
 			_repeater_time = REG_REPEATER_TIME
 		_repeater_time -= 10*delta

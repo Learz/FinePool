@@ -1,10 +1,9 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Scenes/level_env.tres" type="Environment" id=1]
 [ext_resource path="res://Assets/Models/Tiles_simplified.tres" type="MeshLibrary" id=2]
 [ext_resource path="res://Assets/Objects/Ball.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Level.gd" type="Script" id=4]
-[ext_resource path="res://Addons/LineRenderer/LineRenderer.gd" type="Script" id=5]
 [ext_resource path="res://Assets/Objects/shadow.png" type="Texture" id=6]
 [ext_resource path="res://Addons/decalco/src/DecalGLES2.shader" type="Shader" id=7]
 [ext_resource path="res://Assets/Objects/ShadowBillboard.gd" type="Script" id=8]
@@ -17,6 +16,9 @@
 [ext_resource path="res://Assets/Models/Test_level.tscn" type="PackedScene" id=15]
 
 [sub_resource type="DynamicFont" id=1]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
 font_data = ExtResource( 11 )
 
 [sub_resource type="Theme" id=2]
@@ -40,14 +42,9 @@ instance_count = 50
 mesh = SubResource( 5 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="SpatialMaterial" id=7]
-flags_unshaded = true
-flags_no_depth_test = true
-albedo_color = Color( 1, 0.560784, 0, 1 )
+[sub_resource type="CubeMesh" id=7]
 
-[sub_resource type="CubeMesh" id=8]
-
-[sub_resource type="ShaderMaterial" id=9]
+[sub_resource type="ShaderMaterial" id=8]
 shader = ExtResource( 7 )
 shader_param/albedo_tint = Color( 1, 1, 1, 1 )
 shader_param/emission_tint = Color( 0, 0, 0, 1 )
@@ -61,19 +58,19 @@ shader_param/current_frame_blend = 0.0
 shader_param/use_normal_map = false
 shader_param/albedo = ExtResource( 6 )
 
-[sub_resource type="QuadMesh" id=10]
+[sub_resource type="QuadMesh" id=9]
 
-[sub_resource type="SpatialMaterial" id=11]
+[sub_resource type="SpatialMaterial" id=10]
 flags_transparent = true
 flags_unshaded = true
 params_cull_mode = 2
 albedo_color = Color( 1, 1, 1, 0.498039 )
 albedo_texture = ExtResource( 6 )
 
-[sub_resource type="SphereShape" id=12]
+[sub_resource type="SphereShape" id=11]
 radius = 0.5
 
-[sub_resource type="BoxShape" id=13]
+[sub_resource type="BoxShape" id=12]
 
 [node name="Level" type="Spatial"]
 script = ExtResource( 4 )
@@ -102,6 +99,16 @@ anchor_bottom = 1.0
 margin_left = -306.0
 margin_top = -121.0
 margin_right = 305.0
+
+[node name="Angle" type="Label" parent="UI/Panel"]
+margin_left = 14.1581
+margin_top = 9.43875
+margin_right = 148.158
+margin_bottom = 58.4388
+text = "Shot Angle"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Spin" type="TextureRect" parent="UI/Panel"]
 self_modulate = Color( 0, 0, 0, 1 )
@@ -231,6 +238,12 @@ visible = false
 [node name="Ball" parent="." instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2.5, 7 )
 
+[node name="BallPredictor" parent="Ball" instance=ExtResource( 12 )]
+visible = false
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 14 )
+
 [node name="CameraAnchor" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, 7 )
 
@@ -246,19 +259,6 @@ far = 500.0
 [node name="MultiMeshInstance" type="MultiMeshInstance" parent="."]
 multimesh = SubResource( 6 )
 
-[node name="Trajectory" type="ImmediateGeometry" parent="."]
-visible = false
-material_override = SubResource( 7 )
-script = ExtResource( 5 )
-points = [ Vector3( 0, 0, 0 ), Vector3( 5, 0, 0 ) ]
-
-[node name="BallPredictor" parent="." instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2.5, 7 )
-visible = false
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 14 )
-
 [node name="BallAnchor" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, 7 )
 
@@ -266,13 +266,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, 7 )
 transform = Transform( 0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, -0.990955, 0 )
 visible = false
 cast_shadow = 0
-mesh = SubResource( 8 )
-material/0 = SubResource( 9 )
+mesh = SubResource( 7 )
+material/0 = SubResource( 8 )
 
 [node name="ShadowBillboard" type="MeshInstance" parent="BallAnchor"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.49, 0 )
-mesh = SubResource( 10 )
-material/0 = SubResource( 11 )
+mesh = SubResource( 9 )
+material/0 = SubResource( 10 )
 script = ExtResource( 8 )
 
 [node name="RayCastTR" type="RayCast" parent="BallAnchor/ShadowBillboard"]
@@ -302,13 +302,13 @@ collision_mask = 2
 [node name="Sensor" type="Area" parent="BallAnchor"]
 
 [node name="CollisionShape" type="CollisionShape" parent="BallAnchor/Sensor"]
-shape = SubResource( 12 )
+shape = SubResource( 11 )
 
 [node name="Win" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5 )
 monitoring = false
 
 [node name="CollisionShape" type="CollisionShape" parent="Win"]
-shape = SubResource( 13 )
+shape = SubResource( 12 )
 
 [connection signal="area_entered" from="BallAnchor/Sensor" to="." method="_on_Sensor_area_entered"]
