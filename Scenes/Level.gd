@@ -97,20 +97,8 @@ func _process(delta):
 		cam_dest = (ball.global_transform.origin + ball_predictor.global_transform.origin)/2
 	$CameraAnchor.global_transform.origin = lerp($CameraAnchor.global_transform.origin, cam_dest, delta*2)
 	
-	#Move the trajectory predition spheres along the path
-	if ball_predictor.prediction_line.size() > 0:
-		for i in $MultiMeshInstance.multimesh.instance_count:
-			$MultiMeshInstance.multimesh.set_instance_transform(
-				i, 
-				Transform(
-					Basis(),
-					ball_predictor.prediction_line[int((OS.get_ticks_msec()/60.0)+(i*10))%ball_predictor.prediction_line.size()]
-				)
-			)
-
 
 func _physics_process(delta):
-	#Ball trajectory prediction
 	pass
 
 

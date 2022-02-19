@@ -244,6 +244,10 @@ collision_layer = 0
 collision_mask = 2
 script = ExtResource( 14 )
 
+[node name="MultiMeshInstance" type="MultiMeshInstance" parent="Ball"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, -2.5, -7 )
+multimesh = SubResource( 6 )
+
 [node name="CameraAnchor" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, 7 )
 
@@ -255,9 +259,6 @@ fov = 2.0
 size = 10.0
 near = 200.0
 far = 500.0
-
-[node name="MultiMeshInstance" type="MultiMeshInstance" parent="."]
-multimesh = SubResource( 6 )
 
 [node name="BallAnchor" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, 7 )

@@ -32,7 +32,8 @@ func _physics_process(delta: float) -> void:
 			avg_vel += vel
 		avg_vel = avg_vel / last_velocities.size()
 		Global.debug["Avg Velocity"] = avg_vel
-		if avg_vel < 0.2 and velocity.y <= 0.01 and velocity.y >= -0.01:
+		if avg_vel < 0.2 and velocity.y <= 0.01 and velocity.y >= -0.01 and moving == true:
+			$BallPredictor.calculate_prediction()
 			moving = false
 			
 
