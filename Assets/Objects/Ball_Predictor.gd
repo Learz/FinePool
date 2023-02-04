@@ -1,6 +1,7 @@
 extends "res://Assets/Objects/Ball_v2.gd"
 
-onready var mmi = get_node("../MultiMeshInstance")
+export(NodePath) var mmi_path
+onready var mmi = get_node(mmi_path)
 
 var prediction_line:PoolVector3Array
 var prediction_length = 200
@@ -36,7 +37,7 @@ func set_shot(shot : ShotData):
 	transform.origin = Vector3.ZERO
 	shot.power = shot.MAX_POWER
 	hit(shot)
-	prediction_length = 100 if shot.mode == shot.MODE.SHORT else 200
+	prediction_length = 50 if shot.mode == shot.MODE.SHORT else 100
 
 func calculate_prediction(shot : ShotData):
 	set_shot(shot)
