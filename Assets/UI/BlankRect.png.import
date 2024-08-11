@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c84615x3ms383"
-path="res://.godot/imported/Title.png-a42e279fdba1deb45fe1821e15d246fd.ctex"
+uid="uid://dcxmpnli3rlfj"
+path="res://.godot/imported/BlankRect.png-86229975601e48353d078d6d6e411872.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/Title.png"
-dest_files=["res://.godot/imported/Title.png-a42e279fdba1deb45fe1821e15d246fd.ctex"]
+source_file="res://Assets/UI/BlankRect.png"
+dest_files=["res://.godot/imported/BlankRect.png-86229975601e48353d078d6d6e411872.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

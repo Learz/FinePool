@@ -2,20 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c84615x3ms383"
-path="res://.godot/imported/Title.png-a42e279fdba1deb45fe1821e15d246fd.ctex"
+uid="uid://bfrbey6aceue5"
+path.s3tc="res://.godot/imported/tiles_experiment_Tile_tex.png-26089a712e1ff395aee60a88e144c15c.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
+generator_parameters={}
 
 [deps]
 
-source_file="res://Assets/UI/Title.png"
-dest_files=["res://.godot/imported/Title.png-a42e279fdba1deb45fe1821e15d246fd.ctex"]
+source_file="res://Assets/Models/tiles_experiment_Tile_tex.png"
+dest_files=["res://.godot/imported/tiles_experiment_Tile_tex.png-26089a712e1ff395aee60a88e144c15c.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
@@ -31,4 +33,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

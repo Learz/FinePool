@@ -1,0 +1,100 @@
+[gd_scene load_steps=12 format=3 uid="uid://efwjm4hfeqf2"]
+
+[ext_resource type="Script" path="res://Scripts/Level.cs" id="1_fcn5c"]
+[ext_resource type="PackedScene" uid="uid://c6br8h3si2ypg" path="res://Scenes/Entities/sphere.tscn" id="1_oc6fa"]
+[ext_resource type="Material" uid="uid://bmactsytprhru" path="res://Assets/Materials/default_mat.tres" id="2_k0quo"]
+[ext_resource type="MeshLibrary" uid="uid://bwbo4encts5lk" path="res://Assets/Models/tiles_mesh_library.tres" id="4_7frjf"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qytm3"]
+properties/0/path = NodePath("..:CurrentPlayerId")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_egbqt"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_02vux"]
+sky_material = SubResource("ProceduralSkyMaterial_egbqt")
+
+[sub_resource type="Environment" id="Environment_ag57m"]
+background_mode = 2
+sky = SubResource("Sky_02vux")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_s66iy"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7cbpt"]
+size = Vector2(20, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_svwja"]
+diffuse_mode = 3
+albedo_color = Color(0.141176, 0.470588, 1, 1)
+
+[node name="World" type="Node3D" node_paths=PackedStringArray("Players", "Camera")]
+script = ExtResource("1_fcn5c")
+Players = NodePath("Players")
+Camera = NodePath("MainCamera")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("../MainCamera")
+replication_config = SubResource("SceneReplicationConfig_qytm3")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ag57m")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5, -0.707107, 0.5, -0.707107, -8.7289e-09, 0.707107, -0.5, -0.707107, -0.5, 10, 6.26661, -10)
+shadow_enabled = true
+
+[node name="MainCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 8, 10, 8)
+projection = 1
+current = true
+size = 15.0
+far = 100.0
+
+[node name="Floor" type="StaticBody3D" parent="."]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("WorldBoundaryShape3D_s66iy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("PlaneMesh_7cbpt")
+surface_material_override/0 = SubResource("StandardMaterial3D_svwja")
+
+[node name="Objects" type="Node3D" parent="."]
+
+[node name="Sphere" parent="Objects" instance=ExtResource("1_oc6fa")]
+
+[node name="Sphere2" parent="Objects" instance=ExtResource("1_oc6fa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.09399, 3.13354, 0)
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/Entities/player.tscn")
+spawn_path = NodePath("../Players")
+spawn_limit = 4
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, 0)
+use_collision = true
+size = Vector3(1, 2, 10)
+material = ExtResource("2_k0quo")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 5)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0, 2, 2.5, 0)
+depth = 10.0
+material = ExtResource("2_k0quo")
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("4_7frjf")
+data = {
+"cells": PackedInt32Array(-5, 4, 0, -5, 65531, 0, -65532, 65531, 0, -65532, 4, 0, -5, 65532, 0, -5, 65533, 0, -5, 65534, 0, -5, 65535, 0, -5, 0, 0, -5, 1, 0, -5, 2, 0, -5, 3, 0, -4, 4, 0, -3, 4, 0, -2, 4, 0, -1, 4, 0, -65536, 4, 0, -65535, 4, 0, -65534, 4, 0, -65533, 4, 0, -65532, 3, 0, -65532, 2, 0, -65532, 1, 0, -65532, 0, 0, -65532, 65535, 0, -65532, 65534, 0, -65532, 65533, 0, -65532, 65532, 0, -65533, 65531, 0, -65534, 65531, 0, -65535, 65531, 0, -65536, 65531, 0, -1, 65531, 0, -2, 65531, 0, -3, 65531, 0, -4, 65531, 0, -4, 65532, 0, -3, 65532, 0, -2, 65532, 0, -1, 65532, 0, -65536, 65532, 0, -65535, 65532, 0, -65534, 65532, 0, -65533, 65532, 0, -65533, 65533, 0, -65534, 65533, 0, -65535, 65533, 0, -65536, 65533, 0, -1, 65533, 0, -2, 65533, 0, -3, 65533, 0, -4, 65533, 0, -4, 65534, 0, -3, 65534, 0, -2, 65534, 0, -1, 65534, 0, -65536, 65534, 0, -65535, 65534, 0, -65534, 65534, 0, -65533, 65534, 0, -65533, 65535, 0, -65534, 65535, 0, -65535, 65535, 0, -65536, 65535, 0, -1, 65535, 0, -2, 65535, 0, -3, 65535, 0, -4, 65535, 0, -4, 0, 0, -3, 0, 0, -2, 0, 0, -1, 0, 0, -65536, 0, 0, -65535, 0, 0, -65533, 0, 0, -65533, 1, 0, -65535, 1, 0, -65536, 1, 0, -1, 1, 0, -2, 1, 0, -3, 1, 0, -4, 1, 0, -4, 2, 0, -3, 2, 0, -2, 2, 0, -1, 2, 0, -65536, 2, 0, -65535, 2, 0, -65533, 2, 0, -65533, 3, 0, -65535, 3, 0, -65536, 3, 0, -1, 3, 0, -2, 3, 0, -3, 3, 0, -4, 3, 0, -65534, 2, 0, -65534, 1, 0, -65534, 0, 0, -65534, 3, 0)
+}
+metadata/_editor_floor_ = Vector3(0, -1, 0)

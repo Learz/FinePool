@@ -1,0 +1,369 @@
+[gd_scene load_steps=18 format=3 uid="uid://bvnwjpd0f3oa0"]
+
+[ext_resource type="Script" path="res://Scripts/MainHandler.cs" id="1_weq7f"]
+[ext_resource type="Theme" uid="uid://dynug0c8d3ft7" path="res://Assets/UI/MainTheme.tres" id="2_1a5ew"]
+[ext_resource type="Texture2D" uid="uid://c84615x3ms383" path="res://Assets/UI/Title.png" id="2_1443t"]
+[ext_resource type="Script" path="res://Scripts/LevelSpawner.cs" id="3_2l8yr"]
+[ext_resource type="Texture2D" uid="uid://foac6tms6j6w" path="res://Assets/UI/Box_checkerboard.png" id="3_4mf0h"]
+[ext_resource type="Texture2D" uid="uid://dmw6sduwyosag" path="res://Assets/UI/Box.png" id="4_bgs7v"]
+[ext_resource type="Texture2D" uid="uid://c75thl6m06nvw" path="res://Assets/UI/Box_rim.png" id="5_qs62a"]
+[ext_resource type="Script" path="res://Scripts/PlayerControls.cs" id="5_yqmwd"]
+[ext_resource type="Texture2D" uid="uid://llc0l3603uvu" path="res://Assets/Textures/WhiteCircle.png" id="6_mnt1d"]
+[ext_resource type="Texture2D" uid="uid://c8lwr4ijcldqm" path="res://Assets/Textures/BlackCircle.png" id="7_mhpue"]
+[ext_resource type="Texture2D" uid="uid://ofjl0uyty1ae" path="res://Assets/UI/BlankRectRound25.png" id="8_ig128"]
+[ext_resource type="Script" path="res://Scripts/PowerGauge.cs" id="8_sfqmt"]
+[ext_resource type="Script" path="res://Scripts/SystemHandler.cs" id="10_1602e"]
+[ext_resource type="Script" path="res://Scripts/SpinGuide.cs" id="11_lqexr"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_sl3f4"]
+properties/0/path = NodePath("PlayerControls/MainMargin/MarginContainer/HBox/NinePatch/PowerGauge:value")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("PlayerControls/MainMargin/MarginContainer/HBox/SpinGuideBG/SpinGuideIndicator:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggfoy"]
+bg_color = Color(0, 0, 0, 0.196078)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ll7q4"]
+bg_color = Color(1, 1, 1, 1)
+border_width_right = 5
+anti_aliasing = false
+
+[node name="Main" type="Node" node_paths=PackedStringArray("PlayerControls", "Level", "LevelSpawner", "MainMenu", "PlayerUi", "Lobby", "Logo", "MenuOptions", "PlayerList", "HostButton", "JoinButton", "StartButton", "LeaveButton")]
+script = ExtResource("1_weq7f")
+PlayerControls = NodePath("UI/PlayerControls")
+Level = NodePath("Level")
+LevelSpawner = NodePath("LevelSpawner")
+MainMenu = NodePath("UI/MainMenu")
+PlayerUi = NodePath("UI/PlayerControls")
+Lobby = NodePath("UI/MainMenu/Margin/VBoxContainer/Lobby")
+Logo = NodePath("UI/MainMenu/Margin/VBoxContainer/Options/Logo")
+MenuOptions = NodePath("UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions")
+PlayerList = NodePath("UI/MainMenu/Margin/VBoxContainer/Lobby/HBoxContainer/PlayerList")
+HostButton = NodePath("UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions/Host")
+JoinButton = NodePath("UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions/Connect")
+StartButton = NodePath("UI/MainMenu/Margin/VBoxContainer/Lobby/StartGameButton")
+LeaveButton = NodePath("UI/MainMenu/Margin/VBoxContainer/Lobby/LeaveLobbyButton")
+
+[node name="SystemHandler" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("10_1602e")
+
+[node name="Level" type="Node" parent="."]
+
+[node name="LevelSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/Levels/level.tscn")
+spawn_path = NodePath("../Level")
+spawn_limit = 1
+script = ExtResource("3_2l8yr")
+LevelDirectory = "res://Scenes/Levels"
+
+[node name="UI" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_1a5ew")
+
+[node name="MainMenu" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_4mf0h")
+stretch_mode = 1
+
+[node name="Margin" type="MarginContainer" parent="UI/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MainMenu/Margin"]
+layout_mode = 2
+
+[node name="Options" type="HBoxContainer" parent="UI/MainMenu/Margin/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+
+[node name="Logo" type="TextureRect" parent="UI/MainMenu/Margin/VBoxContainer/Options"]
+texture_filter = 4
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("2_1443t")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MenuOptions" type="VBoxContainer" parent="UI/MainMenu/Margin/VBoxContainer/Options"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+size_flags_stretch_ratio = 0.25
+
+[node name="Label" type="Label" parent="UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions"]
+layout_mode = 2
+text = "Direct:"
+
+[node name="Host" type="Button" parent="UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions"]
+layout_mode = 2
+text = "Host"
+
+[node name="Connect" type="Button" parent="UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions"]
+layout_mode = 2
+text = "Connect"
+
+[node name="Remote" type="LineEdit" parent="UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "127.0.0.1"
+placeholder_text = "Remote Host"
+caret_blink = true
+caret_blink_interval = 0.5
+
+[node name="Lobby" type="VBoxContainer" parent="UI/MainMenu/Margin/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MainMenu/Margin/VBoxContainer/Lobby"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 64
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="UI/MainMenu/Margin/VBoxContainer/Lobby/HBoxContainer"]
+_spawnable_scenes = PackedStringArray("res://Scenes/UI/LobbyPlayer.tscn")
+spawn_path = NodePath("../PlayerList")
+
+[node name="PlayerList" type="VBoxContainer" parent="UI/MainMenu/Margin/VBoxContainer/Lobby/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.75
+
+[node name="LobbySettings" type="VBoxContainer" parent="UI/MainMenu/Margin/VBoxContainer/Lobby/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="PlayerNameLabelLabel" type="Label" parent="UI/MainMenu/Margin/VBoxContainer/Lobby/HBoxContainer/LobbySettings"]
+layout_mode = 2
+text = "PlayerName"
+
+[node name="PlayerNameLineEdit" type="LineEdit" parent="UI/MainMenu/Margin/VBoxContainer/Lobby/HBoxContainer/LobbySettings"]
+layout_mode = 2
+placeholder_text = "Player 1"
+
+[node name="StartGameButton" type="Button" parent="UI/MainMenu/Margin/VBoxContainer/Lobby"]
+layout_mode = 2
+text = "Start Game"
+
+[node name="LeaveLobbyButton" type="Button" parent="UI/MainMenu/Margin/VBoxContainer/Lobby"]
+layout_mode = 2
+text = "Leave Lobby"
+
+[node name="PlayerControls" type="Control" parent="UI" node_paths=PackedStringArray("PowerGauge", "SpinGuide", "PlayerLabel")]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -315.0
+offset_top = -180.0
+offset_right = 315.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("5_yqmwd")
+PowerGauge = NodePath("MainMargin/MarginContainer/HBox/NinePatch/PowerGauge")
+SpinGuide = NodePath("MainMargin/MarginContainer/HBox/SpinGuideBG")
+PlayerLabel = NodePath("MainMargin/MarginContainer/HBox/Filler/PlayerLabel")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="UI/PlayerControls"]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_sl3f4")
+
+[node name="MainMargin" type="MarginContainer" parent="UI/PlayerControls"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ContainerBG" type="NinePatchRect" parent="UI/PlayerControls/MainMargin"]
+self_modulate = Color(1, 0.313726, 0.356863, 1)
+layout_mode = 2
+texture = ExtResource("4_bgs7v")
+region_rect = Rect2(0, 0, 256, 256)
+patch_margin_left = 64
+patch_margin_top = 64
+patch_margin_right = 64
+patch_margin_bottom = 64
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="ContainerBorder" type="NinePatchRect" parent="UI/PlayerControls/MainMargin"]
+layout_mode = 2
+texture = ExtResource("5_qs62a")
+draw_center = false
+region_rect = Rect2(0, 0, 256, 256)
+patch_margin_left = 64
+patch_margin_top = 64
+patch_margin_right = 64
+patch_margin_bottom = 64
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PlayerControls/MainMargin"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="HBox" type="HBoxContainer" parent="UI/PlayerControls/MainMargin/MarginContainer"]
+layout_direction = 2
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Filler" type="Control" parent="UI/PlayerControls/MainMargin/MarginContainer/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 20.0
+
+[node name="PlayerLabel" type="Label" parent="UI/PlayerControls/MainMargin/MarginContainer/HBox/Filler"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "No Player"
+horizontal_alignment = 1
+
+[node name="NinePatch" type="NinePatchRect" parent="UI/PlayerControls/MainMargin/MarginContainer/HBox"]
+clip_children = 2
+texture_filter = 4
+layout_mode = 2
+texture = ExtResource("8_ig128")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="PowerGauge" type="ProgressBar" parent="UI/PlayerControls/MainMargin/MarginContainer/HBox/NinePatch"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+mouse_default_cursor_shape = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ggfoy")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ll7q4")
+max_value = 1.0
+step = 0.1
+value = 0.2
+fill_mode = 3
+show_percentage = false
+script = ExtResource("8_sfqmt")
+
+[node name="SpinGuideBG" type="TextureRect" parent="UI/PlayerControls/MainMargin/MarginContainer/HBox" node_paths=PackedStringArray("AimDot", "AimInfo")]
+layout_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+texture = ExtResource("6_mnt1d")
+expand_mode = 2
+stretch_mode = 4
+script = ExtResource("11_lqexr")
+AimDot = NodePath("SpinGuideIndicator")
+AimInfo = NodePath("SpinInfo")
+
+[node name="SpinInfo" type="Label" parent="UI/PlayerControls/MainMargin/MarginContainer/HBox/SpinGuideBG"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+text = "(0,0)"
+horizontal_alignment = 1
+
+[node name="SpinGuideIndicator" type="TextureRect" parent="UI/PlayerControls/MainMargin/MarginContainer/HBox/SpinGuideBG"]
+modulate = Color(1, 1, 1, 0.196078)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_mhpue")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="GuideCenterIndicator" type="TextureRect" parent="UI/PlayerControls/MainMargin/MarginContainer/HBox/SpinGuideBG"]
+modulate = Color(0, 0, 0, 0.701961)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_mhpue")
+expand_mode = 2
+stretch_mode = 4
+
+[connection signal="pressed" from="UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions/Connect" to="." method="_on_connect_pressed"]
+[connection signal="text_submitted" from="UI/MainMenu/Margin/VBoxContainer/Lobby/HBoxContainer/LobbySettings/PlayerNameLineEdit" to="." method="_on_player_name_line_edit_text_submitted"]
+[connection signal="pressed" from="UI/MainMenu/Margin/VBoxContainer/Lobby/StartGameButton" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="UI/MainMenu/Margin/VBoxContainer/Lobby/LeaveLobbyButton" to="." method="_on_leave_lobby_button_pressed"]
