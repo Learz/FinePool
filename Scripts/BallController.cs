@@ -3,42 +3,88 @@ using System;
 using ExtensionMethods;
 
 
-public class BallController : KinematicBody
-{
+public class BallController : KinematicBody {
     Ball ball = new Ball();
+    MeshInstance ballMesh;
+    public Spatial cameraAnchor { get; private set; }
 
     // Called when the node enters the scene tree for the first time.
-    public override void _Ready(){
+    public override void _Ready() {
+        ballMesh = GetNode<MeshInstance>("Ball");
+        cameraAnchor = GetNode<Spatial>("CameraAnchor");
         ball.velocity.x = 5f;
+        ball.velocity.y = 0.2f;
         this.GetGlobal().debug["Velocity before"] = ball.velocity;
+        ball.groundCasts.TopLeft = GetNode<RayCast>("CastArray/TL");
+        ball.groundCasts.TopRight = GetNode<RayCast>("CastArray/TR");
+        ball.groundCasts.BottomLeft = GetNode<RayCast>("CastArray/BL");
+        ball.groundCasts.BottomRight = GetNode<RayCast>("CastArray/BR");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _PhysicsProcess(float delta){
+    public override void _PhysicsProcess(float delta) {
         //if (ball.isMoving){
-            physicsStep(delta);
+        physicsStep(delta);
         //}
+
+        cameraAnchor.GlobalTranslation = ballMesh.GlobalTranslation;
     }
 
-    private void physicsStep(float delta){
+    private void physicsStep(float delta) {
+        float floorHeight = ball.groundCasts.highestPoint();
         ball.velocity += this.GetGlobal().GRAVITY * delta;
 
         KinematicCollision collision = MoveAndCollide(ball.velocity * delta, true, true, true);
 
-        this.GetGlobal().debug["Collision normal"] = "None";
-        this.GetGlobal().debug["Collision point"] = "None";
-
-        if (collision != null){
-            if(!(ball is BallPredictor)){
+        if (collision != null) {
+            if (!(ball is BallPredictor)) {
                 this.GetGlobal().debug["Collision normal"] = collision.Normal;
                 this.GetGlobal().debug["Collision point"] = collision.Position;
             }
 
             ball.velocity = ball.velocity.Bounce(collision.Normal);
-		    ball.velocity.y /= 1.5f;
+        }
+
+        ball.angularVelocity -= ball.angularVelocity * Ball.ANGULAR_DAMP * 0.1f;
+        if (GetNode<RayCast>("FloorCast").IsColliding()) {
+            ball.velocity = ball.velocity.Rotated(Vector3.Down, ball.spin.x * ball.velocity.Length() / 10);
+            ball.velocity.x = ball.velocity.x - (ball.velocity.x * Ball.LINEAR_DAMP * delta);
+            ball.velocity.z = ball.velocity.z - (ball.velocity.z * Ball.LINEAR_DAMP * delta);
+            ball.angularVelocity = ball.velocity;
+        }
+
+        if (GlobalTranslation.y <= floorHeight && ball.velocity.y <= -0.01f) {
+            this.GetGlobal().debug["Touching Ground"] = "True";
+            ball.velocity = ball.velocity.Bounce(Vector3.Up);
+            ball.velocity.y /= 1.5f;
+        } else {
+            this.GetGlobal().debug["Touching Ground"] = "False";
+        }
+
+        GlobalTranslate(ball.velocity * delta);
+        GlobalTranslation = new Vector3(
+            GlobalTranslation.x,
+            Math.Max(floorHeight, GlobalTranslation.y + ball.velocity.y),
+            GlobalTranslation.z
+        );
+        ballMesh.RotateX(-ball.angularVelocity.z * delta);
+        ballMesh.RotateZ(-ball.angularVelocity.x * delta);
+        ballMesh.GlobalRotate(Vector3.Down, ball.spin.x * delta * 10);
+        /*
+        this.GetGlobal().debug["Collision normal"] = "None";
+        this.GetGlobal().debug["Collision point"] = "None";
+
+        if (collision != null) {
+            if (!(ball is BallPredictor)) {
+                this.GetGlobal().debug["Collision normal"] = collision.Normal;
+                this.GetGlobal().debug["Collision point"] = collision.Position;
+            }
+
+            ball.velocity = ball.velocity.Bounce(collision.Normal);
+            ball.velocity.y /= 1.5f;
         }
         ball.angularVelocity -= ball.angularVelocity * Ball.ANGULAR_DAMP * 0.1f;
-        if (GetNode<RayCast>("FloorCast").IsColliding()){
+        if (GetNode<RayCast>("FloorCast").IsColliding()) {
             ball.velocity = ball.velocity.Rotated(Vector3.Down, ball.spin.x * ball.velocity.Length() / 10);
             ball.velocity.x = ball.velocity.x - (ball.velocity.x * Ball.LINEAR_DAMP * delta);
             ball.velocity.z = ball.velocity.z - (ball.velocity.z * Ball.LINEAR_DAMP * delta);
@@ -46,9 +92,9 @@ public class BallController : KinematicBody
         }
 
         GlobalTranslate(ball.velocity * delta);
-        GetNode<MeshInstance>("Ball").RotateX(-ball.angularVelocity.z*delta);
-        GetNode<MeshInstance>("Ball").RotateZ(-ball.angularVelocity.x*delta);
+        GetNode<MeshInstance>("Ball").RotateX(-ball.angularVelocity.z * delta);
+        GetNode<MeshInstance>("Ball").RotateZ(-ball.angularVelocity.x * delta);
         GetNode<MeshInstance>("Ball").GlobalRotate(Vector3.Down, ball.spin.x * delta * 10);
-
+        */
     }
 }

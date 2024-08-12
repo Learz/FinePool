@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/circle.png-aaedba66a9fed53e0dab4b612695c7bb.stex"
+path="res://.import/BlankCircle.png-976c88e8329bbefae37245edd84cd9d2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/circle.png"
-dest_files=[ "res://.import/circle.png-aaedba66a9fed53e0dab4b612695c7bb.stex" ]
+source_file="res://Assets/UI/BlankCircle.png"
+dest_files=[ "res://.import/BlankCircle.png-976c88e8329bbefae37245edd84cd9d2.stex" ]
 
 [params]
 
@@ -21,13 +21,14 @@ compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
 flags/filter=true
-flags/mipmaps=false
-flags/anisotropic=false
+flags/mipmaps=true
+flags/anisotropic=true
 flags/srgb=2
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

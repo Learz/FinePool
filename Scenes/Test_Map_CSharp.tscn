@@ -1,13 +1,15 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/level_env.tres" type="Environment" id=1]
 [ext_resource path="res://Assets/Models/Tiles_simplified.tres" type="MeshLibrary" id=2]
 [ext_resource path="res://Scripts/UI.cs" type="Script" id=3]
-[ext_resource path="res://Assets/Objects/shadow.png" type="Texture" id=6]
-[ext_resource path="res://Addons/decalco/src/DecalGLES2.shader" type="Shader" id=7]
-[ext_resource path="res://Assets/UI/circle.png" type="Texture" id=9]
+[ext_resource path="res://Scenes/GameController.cs" type="Script" id=4]
+[ext_resource path="res://Assets/UI/Box_rim.png" type="Texture" id=5]
+[ext_resource path="res://Assets/UI/Box.png" type="Texture" id=6]
+[ext_resource path="res://Assets/UI/BlankRectRound25.png" type="Texture" id=7]
+[ext_resource path="res://Assets/UI/BlankCircle.png" type="Texture" id=9]
 [ext_resource path="res://Assets/UI/mini-wakuwaku.otf" type="DynamicFontData" id=11]
-[ext_resource path="res://Assets/Objects/Ball_v2.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Assets/Objects/Ball.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Assets/UI/WinFont.tres" type="DynamicFont" id=13]
 
 [sub_resource type="DynamicFont" id=1]
@@ -18,12 +20,6 @@ font_data = ExtResource( 11 )
 
 [sub_resource type="Theme" id=2]
 default_font = SubResource( 1 )
-
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 1, 0, 0, 1 )
-
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="SphereMesh" id=5]
 radius = 0.1
@@ -37,28 +33,12 @@ instance_count = 50
 mesh = SubResource( 5 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="CubeMesh" id=7]
-
-[sub_resource type="ShaderMaterial" id=8]
-shader = ExtResource( 7 )
-shader_param/albedo_tint = Color( 1, 1, 1, 1 )
-shader_param/emission_tint = Color( 0, 0, 0, 1 )
-shader_param/emission_strength = 1.0
-shader_param/occlusion_strength = 1.0
-shader_param/specular_strength = 1.0
-shader_param/metallic_strength = 1.0
-shader_param/current_frame = 0
-shader_param/flipbook_columns_count = 1
-shader_param/current_frame_blend = 0.0
-shader_param/use_normal_map = false
-shader_param/albedo = ExtResource( 6 )
-
-[sub_resource type="SphereShape" id=11]
-radius = 0.5
-
 [sub_resource type="BoxShape" id=12]
 
 [node name="Level" type="Spatial"]
+script = ExtResource( 4 )
+playersPaths = [ NodePath("Ball") ]
+cameraPath = NodePath("Camera")
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
@@ -67,46 +47,66 @@ margin_top = -0.222717
 margin_bottom = -0.222717
 theme = SubResource( 2 )
 script = ExtResource( 3 )
+spinCursorPath = NodePath("Panel/Spin/SpinCursor")
+powerBarPath = NodePath("Panel/HitPowerBar")
 
 [node name="UITween" type="Tween" parent="UI"]
 
-[node name="Panel" type="ColorRect" parent="UI"]
+[node name="Panel" type="NinePatchRect" parent="UI"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -306.0
-margin_top = -121.0
+margin_top = -143.0
 margin_right = 305.0
+margin_bottom = -15.0
+texture = ExtResource( 6 )
+patch_margin_left = 64
+patch_margin_top = 64
+patch_margin_right = 64
+patch_margin_bottom = 64
 
-[node name="Angle" type="Label" parent="UI/Panel"]
-margin_left = 14.1581
-margin_top = 9.43875
-margin_right = 148.158
-margin_bottom = 58.4388
-text = "Shot Angle"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Rim" type="NinePatchRect" parent="UI/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+patch_margin_left = 64
+patch_margin_top = 64
+patch_margin_right = 64
+patch_margin_bottom = 64
 
 [node name="Spin" type="TextureRect" parent="UI/Panel"]
-self_modulate = Color( 0, 0, 0, 1 )
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+self_modulate = Color( 0, 0, 0, 0.313726 )
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 167.528
-margin_top = -110.0
-margin_right = 267.528
-margin_bottom = -10.0
+margin_left = -145.0
+margin_top = 16.0
+margin_right = -49.0
+margin_bottom = -16.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 texture = ExtResource( 9 )
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+stretch_mode = 6
+
+[node name="Depth" type="TextureRect" parent="UI/Panel/Spin"]
+self_modulate = Color( 0, 0, 0, 0.313726 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 9 )
+expand = true
+stretch_mode = 6
 
 [node name="SpinCursor" type="TextureRect" parent="UI/Panel/Spin"]
-self_modulate = Color( 0.505882, 0, 0, 1 )
+self_modulate = Color( 1, 0.392157, 0.392157, 1 )
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -117,32 +117,40 @@ margin_right = 6.0
 margin_bottom = 6.0
 texture = ExtResource( 9 )
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="HitPowerBar" type="ProgressBar" parent="UI/Panel"]
-margin_left = 583.013
-margin_top = 111.0
-margin_right = 683.013
-margin_bottom = 126.0
-rect_rotation = -89.9999
-custom_styles/fg = SubResource( 3 )
-custom_styles/bg = SubResource( 4 )
+[node name="Angle" type="Label" parent="UI/Panel"]
+margin_left = 25.0
+margin_top = 23.2227
+margin_right = 117.0
+margin_bottom = 40.2227
+text = "Shot Angle"
+
+[node name="HitPowerBar" type="TextureProgress" parent="UI/Panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = 17.0
+margin_right = -25.0
+margin_bottom = -16.0
 max_value = 20.0
-step = 1.0
 value = 4.0
-percent_visible = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
+texture_under = ExtResource( 7 )
+texture_progress = ExtResource( 7 )
+fill_mode = 3
+tint_under = Color( 0, 0, 0, 0.313726 )
+tint_progress = Color( 1, 0.392157, 0.392157, 1 )
+nine_patch_stretch = true
+stretch_margin_left = 8
+stretch_margin_top = 8
+stretch_margin_right = 8
+stretch_margin_bottom = 8
 
 [node name="WinLabel" type="Label" parent="UI"]
-anchor_top = 0.35
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.35
-margin_top = 390.0
-margin_bottom = 871.0
+anchor_bottom = 1.0
+margin_bottom = 600.0
 custom_fonts/font = ExtResource( 13 )
 text = "You win!"
 align = 1
@@ -164,8 +172,8 @@ __meta__ = {
 [node name="Floor" type="GridMap" parent="."]
 mesh_library = ExtResource( 2 )
 cell_size = Vector3( 2, 1, 2 )
-collision_layer = 3
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 data = {
 "cells": PoolIntArray( 1, 0, 1048576, 2, 0, 1048576, 3, 0, 0, 65532, 0, 1048576, 65533, 0, 0, 65534, 0, 1048576, 65535, 0, 1048576, 65536, 0, 1048579, 196605, 0, 0, 196606, 0, 1048577, 196607, 0, 1048584, 0, 1, 1048576, 1, 1, 1048576, 2, 1, 1048576, 3, 1, 0, 65533, 1, 1048576, 65534, 1, 1048576, 65535, 1, 1048576, 131068, 1, 1048583, 0, 2, 1048576, 1, 2, 1048576, 2, 2, 1048576, 3, 2, 0, 65533, 2, 1048576, 65534, 2, 1048576, 65535, 2, 1048576, 131068, 2, 1048576, 0, 3, 1048576, 1, 3, 1048576, 2, 3, 1048576, 3, 3, 1048576, 65534, 3, 1048591, 65535, 3, 1048576, 131068, 3, 1048576, 131069, 3, 1048576, 131070, 3, 7, 0, 65532, 1048576, 1, 65532, 1048576, 2, 65532, 1048576, 3, 65532, 1048576, 65532, 65532, 1048576, 65533, 65532, 1048576, 65534, 65532, 1048576, 65535, 65532, 1048576, 0, 65533, 1048576, 1, 65533, 1048576, 2, 65533, 1048589, 3, 65533, 0, 65532, 65533, 1048576, 65533, 65533, 1048576, 65534, 65533, 1048576, 65535, 65533, 1048576, 0, 65534, 1048576, 1, 65534, 1048576, 2, 65534, 1048576, 3, 65534, 0, 65532, 65534, 1048576, 65533, 65534, 1048576, 65534, 65534, 1048576, 65535, 65534, 1048576, 1, 65535, 1048576, 2, 65535, 1048576, 3, 65535, 0, 65532, 65535, 1048576, 65533, 65535, 1048576, 65534, 65535, 1048576, 65535, 65535, 1048576, 65536, 65535, 3, 196605, 65535, 0, 196606, 65535, 1, 196607, 65535, 8 )
 }
@@ -212,33 +220,15 @@ environment = ExtResource( 1 )
 multimesh = SubResource( 6 )
 
 [node name="Ball" parent="." instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2.5, 7 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 8.5, 7 )
 
-[node name="CameraAnchor" type="Spatial" parent="Ball"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.70403, 0 )
-
-[node name="Camera" type="Camera" parent="Ball/CameraAnchor"]
-transform = Transform( -0.707107, -0.40558, 0.579228, 0, 0.819152, 0.573577, -0.707107, 0.40558, -0.579228, 140, 140, -140 )
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -0.707107, -0.40558, 0.579228, 0, 0.819152, 0.573577, -0.707107, 0.40558, -0.579228, 133, 142, -133 )
 current = true
 fov = 2.0
 size = 10.0
 near = 200.0
 far = 500.0
-
-[node name="BallAnchor" type="Spatial" parent="Ball"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.70403, 0 )
-
-[node name="Shadow" type="MeshInstance" parent="Ball/BallAnchor"]
-transform = Transform( 0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, -0.990955, 0 )
-visible = false
-cast_shadow = 0
-mesh = SubResource( 7 )
-material/0 = SubResource( 8 )
-
-[node name="Sensor" type="Area" parent="Ball/BallAnchor"]
-
-[node name="CollisionShape" type="CollisionShape" parent="Ball/BallAnchor/Sensor"]
-shape = SubResource( 11 )
 
 [node name="Win" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5 )
@@ -246,5 +236,3 @@ monitoring = false
 
 [node name="CollisionShape" type="CollisionShape" parent="Win"]
 shape = SubResource( 12 )
-
-[connection signal="area_entered" from="Ball/BallAnchor/Sensor" to="." method="_on_Sensor_area_entered"]

@@ -1,15 +1,12 @@
 shader_type canvas_item;
 uniform sampler2D background;
+uniform vec2 global_position;
 
 void vertex() {
-// Output:0
-
+	
 }
 
 void fragment() {
-// Input:3
-
-// Texture:4
 	vec3 original_texture_color;
 	float original_texture_alpha;
 	{
@@ -19,7 +16,7 @@ void fragment() {
 	}
 
 // Texture:2
-	vec4 tex_frg_2_read = texture(background, ((SCREEN_UV.xy / SCREEN_PIXEL_SIZE.xy) * 0.002f));
+	vec4 tex_frg_2_read = texture(background, (FRAGCOORD.xy + vec2(-global_position.x,global_position.y)) * 0.001f);
 	vec3 bg_color = tex_frg_2_read.rgb;
 	float bg_opacity = tex_frg_2_read.a;
 

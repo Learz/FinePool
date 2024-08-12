@@ -9,3 +9,4 @@ export_presets.cfg
 
 #Blender-specific ignores
 *.blend[1-9]
+.build/
