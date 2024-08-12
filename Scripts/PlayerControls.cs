@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class PlayerControls : Control {
 
@@ -42,13 +43,14 @@ public partial class PlayerControls : Control {
 	}
 
 	// ---- Functions ----
-	public void AssignPlayer(Player p) {
-		if (p == null) {
-			Player = (Player)GetTree().GetFirstNodeInGroup("players");
-			GD.Print("No Player Assigned, defaulting to " + Player);
-		} else if (Player != p) {
-			Player = p;
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void AssignPlayerById(int playerId) {
+		var foundPlayer = (Player)GetTree().GetNodesInGroup("players")?.Where(p => p.Name == playerId.ToString())?.First();
+		if (foundPlayer == null) {
+			GD.PrintErr("Could not find player ", playerId);
+			return;
 		}
+		Player = foundPlayer;
 		Player.PlayerInput.Reset();
 	}
 }

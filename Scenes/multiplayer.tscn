@@ -31,7 +31,7 @@ bg_color = Color(1, 1, 1, 1)
 border_width_right = 5
 anti_aliasing = false
 
-[node name="Main" type="Node" node_paths=PackedStringArray("PlayerControls", "Level", "LevelSpawner", "MainMenu", "PlayerUi", "Lobby", "Logo", "MenuOptions", "PlayerList", "HostButton", "JoinButton", "StartButton", "LeaveButton")]
+[node name="Main" type="Node" node_paths=PackedStringArray("PlayerControls", "Level", "LevelSpawner", "MainMenu", "PlayerUi", "Lobby", "Logo", "MenuOptions", "PlayerList", "DebugInfo", "HostButton", "JoinButton", "StartButton", "LeaveButton")]
 script = ExtResource("1_weq7f")
 PlayerControls = NodePath("UI/PlayerControls")
 Level = NodePath("Level")
@@ -42,6 +42,7 @@ Lobby = NodePath("UI/MainMenu/Margin/VBoxContainer/Lobby")
 Logo = NodePath("UI/MainMenu/Margin/VBoxContainer/Options/Logo")
 MenuOptions = NodePath("UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions")
 PlayerList = NodePath("UI/MainMenu/Margin/VBoxContainer/Lobby/HBoxContainer/PlayerList")
+DebugInfo = NodePath("UI/DebugInfo")
 HostButton = NodePath("UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions/Host")
 JoinButton = NodePath("UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions/Connect")
 StartButton = NodePath("UI/MainMenu/Margin/VBoxContainer/Lobby/StartGameButton")
@@ -361,6 +362,16 @@ mouse_filter = 2
 texture = ExtResource("7_mhpue")
 expand_mode = 2
 stretch_mode = 4
+
+[node name="DebugInfo" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 62.0
+offset_bottom = 35.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Text"
 
 [connection signal="pressed" from="UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Margin/VBoxContainer/Options/MenuOptions/Connect" to="." method="_on_connect_pressed"]

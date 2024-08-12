@@ -1,17 +1,16 @@
 using Godot;
 using System;
 
-public partial class LevelSpawner : MultiplayerSpawner
-{
+public partial class LevelSpawner : MultiplayerSpawner {
 	[Export(PropertyHint.Dir)]
 	public string LevelDirectory { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
+	public override void _Ready() {
 		ScanForLevels();
 	}
 
+	// TODO : Also show the list of playable maps somewhere duh
 	private void ScanForLevels() {
 		using var dir = DirAccess.Open(LevelDirectory);
 		if (dir != null) {
@@ -27,7 +26,7 @@ public partial class LevelSpawner : MultiplayerSpawner
 				fileName = dir.GetNext();
 			}
 		} else {
-			GD.Print("An error occurred when trying to access the path.");
+			GD.PrintErr("An error occurred when trying to access the path.");
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System;
 
 public enum ControlMode {
 	None,
+	Move,
 	Aim,
 	Spin,
 	Shoot
@@ -14,14 +15,16 @@ public partial class PlayerInput : MultiplayerSynchronizer {
 	[Signal]
 	public delegate void OnShootEventHandler(double power);
 
-	[Export]
-	public Vector2 MoveDirection = new();
-	[Export]
+	[Signal]
+	public delegate void OnEndTurnEventHandler();
 
+	[Export]
+	public Vector2 MoveDirection = Vector2.Zero;
 
 	private Vector3 _aim = Vector3.Forward;
 	[Signal]
 	public delegate void OnAimChangedEventHandler(Vector3 aim);
+	[Export]
 	public Vector3 Aim {
 		get { return _aim; }
 		set {
@@ -31,11 +34,10 @@ public partial class PlayerInput : MultiplayerSynchronizer {
 	}
 
 	private double fineGrainedPower = 0.0;
-	[Export(PropertyHint.Range, "0,1,0.1")]
-
 	private double _power;
 	[Signal]
 	public delegate void OnPowerChangedEventHandler(double power);
+	[Export]
 	public double Power {
 		get { return _power; }
 		set {
@@ -58,16 +60,27 @@ public partial class PlayerInput : MultiplayerSynchronizer {
 		}
 	}
 
-	public ControlMode CurrentControlMode = ControlMode.None;
+	public ControlMode CurrentControlMode = ControlMode.Aim;
+
+	[Export]
+	public bool IsTurn = false;
 
 	// ---- Overrides ----
 	public override void _Input(InputEvent @event) {
+		if (!IsTurn) return;
+		if (!IsMultiplayerAuthority()) return;
+
 		if (@event.IsActionPressed("ui_select")) {
 			fineGrainedPower = 0;
-			CurrentControlMode = CurrentControlMode != ControlMode.Shoot ? ControlMode.Shoot : ControlMode.None;
+			if (CurrentControlMode != ControlMode.Shoot) {
+				CurrentControlMode = ControlMode.Shoot;
+			} else {
+				Rpc(nameof(Shoot));
+				CurrentControlMode = ControlMode.Aim;
+			}
 		}
 		if (@event.IsActionPressed("dev_m")) {
-			CurrentControlMode = CurrentControlMode != ControlMode.None ? ControlMode.None : ControlMode.Aim;
+			CurrentControlMode = CurrentControlMode != ControlMode.Move ? ControlMode.Move : ControlMode.Aim;
 		}
 
 		switch (CurrentControlMode) {
@@ -91,10 +104,16 @@ public partial class PlayerInput : MultiplayerSynchronizer {
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
-		handleMode(delta);
+		if (!IsTurn) return;
+		if (!IsMultiplayerAuthority()) return;
+		handleToggleSpinMode();
+		Globals.Debug["ControlMode"] = CurrentControlMode.ToString();
 
-		if (CurrentControlMode == ControlMode.None) {
+		if (CurrentControlMode == ControlMode.Move) {
 			handleFreeMove();
+		}
+		if (CurrentControlMode == ControlMode.Shoot) {
+			handlePower(delta);
 		}
 	}
 
@@ -112,20 +131,14 @@ public partial class PlayerInput : MultiplayerSynchronizer {
 
 	private void handleFreeMove() {
 		MoveDirection = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		if (Input.IsActionJustPressed("ui_accept")) {
-			Rpc(nameof(Shoot));
-		}
 	}
 
-	private void handleMode(double delta) {
+	private void handleToggleSpinMode() {
 		if (Input.IsActionPressed("aim_mode")) {
 			CurrentControlMode = ControlMode.Spin;
 		}
 		if (Input.IsActionJustReleased("aim_mode")) {
-			CurrentControlMode = ControlMode.None;
-		}
-		if (CurrentControlMode == ControlMode.Shoot) {
-			handlePower(delta);
+			CurrentControlMode = ControlMode.Aim;
 		}
 	}
 

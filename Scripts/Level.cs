@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 public partial class Level : Node3D {
 	private const float SPAWN_RANDOM = 5.0f;
@@ -27,9 +28,6 @@ public partial class Level : Node3D {
 		if (!Multiplayer.IsServer())
 			return;
 
-		Multiplayer.PeerConnected += id => AddPlayer((int)id);
-		Multiplayer.PeerDisconnected += id => DelPlayer((int)id);
-
 		// Spawn already connected players
 		foreach (int id in Multiplayer.GetPeers()) {
 			AddPlayer(id);
@@ -44,6 +42,10 @@ public partial class Level : Node3D {
 	public override void _Process(double delta) {
 		if (CurrentPlayerId == -1) return;
 
+		foreach (Player player in Players.GetChildren().Cast<Player>()) {
+			player.PlayerInput.IsTurn = player.PlayerId == CurrentPlayerId;
+		}
+
 		var playerNode = (Player)Players.GetNode(CurrentPlayerId.ToString());
 		if (Camera != null && playerNode != null) {
 			Camera.Position = Camera.Position.Lerp(playerNode.Position + cameraOffset, 0.2f);
@@ -51,18 +53,29 @@ public partial class Level : Node3D {
 	}
 
 	public override void _Input(InputEvent @event) {
-		base._Input(@event);
 		if (@event.IsActionPressed("ui_focus_next")) {
 			Rpc(nameof(NextPlayer));
 		};
 	}
 
-	public override void _ExitTree() {
+    public override void _EnterTree() {
+		if (!Multiplayer.IsServer())
+			return;
+		
+		Multiplayer.PeerConnected += AddPlayer;
+		Multiplayer.PeerDisconnected += DelPlayer;
+	}
+
+    public override void _ExitTree() {
 		if (!Multiplayer.IsServer())
 			return;
 
-		Multiplayer.PeerConnected -= id => AddPlayer((int)id);
-		Multiplayer.PeerDisconnected -= id => DelPlayer((int)id);
+		Multiplayer.PeerConnected -= AddPlayer;
+		Multiplayer.PeerDisconnected -= DelPlayer;
+	}
+
+	public void AddPlayer(long id) {
+		AddPlayer((int) id);
 	}
 
 	public void AddPlayer(int id) {
@@ -73,11 +86,11 @@ public partial class Level : Node3D {
 		player.PlayerId = id;
 
 		// Randomize player position.
-		var rand = new System.Random();
+		var rand = new Random();
 		var angle = (float)(rand.NextDouble() * 2 * Mathf.Pi);
 		var pos = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * SPAWN_RANDOM * (float)rand.NextDouble();
 
-		player.Position = new Vector3(pos.X, 0, pos.Y);
+		player.Position = new Vector3(pos.X, 0.1f, pos.Y);
 		player.Name = id.ToString();
 
 		Players.AddChild(player);
@@ -85,7 +98,12 @@ public partial class Level : Node3D {
 		playerOrder.Add(id);
 		if (CurrentPlayerId <= 0) {
 			CurrentPlayerId = id;
+			PlayerControls.AssignPlayerById(CurrentPlayerId);
 		}
+	}
+
+	public void DelPlayer(long id) {
+		DelPlayer((int)id);
 	}
 
 	public void DelPlayer(int id) {
@@ -99,11 +117,10 @@ public partial class Level : Node3D {
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void NextPlayer() {
-		if (!Multiplayer.IsServer())
-			return;
+		if (!Multiplayer.IsServer()) return;
 		var playerId = playerOrder[current_player];
 		var playerNode = (Player)Players.GetNode(playerId.ToString());
-		playerNode.isTurn = false;
+		playerNode.PlayerInput.IsTurn = false;
 
 		current_player = (current_player + 1) % playerOrder.Count;
 
@@ -111,10 +128,8 @@ public partial class Level : Node3D {
 		var nextPlayerNode = (Player)Players.GetNode(nextPlayerId.ToString());
 		CurrentPlayerId = nextPlayerId;
 
-		PlayerControls.AssignPlayer(playerNode);
+		PlayerControls.Rpc(nameof(PlayerControls.AssignPlayerById), CurrentPlayerId);
 
-		GD.Print("Player List : " + playerOrder.ToString());
-		GD.Print("Current Player : " + CurrentPlayerId);
-		nextPlayerNode.isTurn = true;
+		nextPlayerNode.PlayerInput.IsTurn = true;
 	}
 }

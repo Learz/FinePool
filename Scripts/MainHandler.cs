@@ -1,8 +1,14 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+
+public static class Globals {
+	public static Dictionary<string, string> Debug = new Dictionary<string, string>();
+}
 
 public partial class MainHandler : Node {
 	private const int PORT = 4433;
+
 
 	[ExportGroup("Controls")]
 	[Export] PlayerControls PlayerControls;
@@ -23,6 +29,7 @@ public partial class MainHandler : Node {
 	[Export] TextureRect Logo;
 	[Export] Control MenuOptions;
 	[Export] Control PlayerList;
+	[Export] Label DebugInfo;
 
 	[ExportGroup("Buttons")]
 	[Export] Button HostButton;
@@ -52,11 +59,16 @@ public partial class MainHandler : Node {
 		}
 	}
 
-	public override void _Input(InputEvent @event) {
-		if (!Multiplayer.IsServer())
-			return;
+	public override void _Process(double delta) {
+		Globals.Debug["IsServer"] = Multiplayer.IsServer().ToString();
+		if (Globals.Debug != null) {
+			DebugInfo.Text = string.Join(System.Environment.NewLine, Globals.Debug);
+		}
+	}
 
-		if (@event.IsActionPressed("dev_n")) PlayerControls.AssignPlayer(null);
+	public override void _Input(InputEvent @event) {
+		if (Multiplayer.HasMultiplayerPeer() && !Multiplayer.IsServer())
+			return;
 
 		if (@event.IsAction("ui_home") && Input.IsActionJustPressed("ui_home")) {
 			CallDeferred(nameof(ChangeLevel), GD.Load<PackedScene>("res://Scenes/Levels/level.tscn"));
@@ -96,7 +108,7 @@ public partial class MainHandler : Node {
 
 	private void OnLeaveLobbyButtonPressed() {
 		LeaveLobby();
-		Multiplayer.MultiplayerPeer = null;
+		Multiplayer.MultiplayerPeer.DisconnectPeer(Multiplayer.GetUniqueId());
 	}
 
 	private void PeerConnected(long id) {
@@ -164,7 +176,6 @@ public partial class MainHandler : Node {
 		//GetTree().Paused = false;
 		// Only change level on the server.
 		// Clients will instantiate the level via the spawner.
-		GD.Print("IsServer : " + Multiplayer.IsServer());
 		if (Multiplayer.IsServer()) {
 			GD.Print("Trying to load map");
 			CallDeferred(MethodName.ChangeLevel, GD.Load<PackedScene>("res://Scenes/Levels/level.tscn"));
@@ -178,8 +189,9 @@ public partial class MainHandler : Node {
 			Level.RemoveChild(c);
 			c.QueueFree();
 		}
+		var nextLevel = (Level)scene.Instantiate();
+		nextLevel.PlayerControls = PlayerControls;
 		// Add new level.
-		Level.AddChild(scene.Instantiate());
-		CurrentLevel.PlayerControls = PlayerControls;
+		Level.AddChild(nextLevel);
 	}
 }
